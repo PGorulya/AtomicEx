@@ -34,8 +34,6 @@ class M1 implements Runnable {
     @Override
     public void run() {
 
-        AtomicEx.counter.get();     // need it !
-
         while (AtomicEx.counter.incrementAndGet() < 40) {
             AtomicEx.atomicArray.set(AtomicEx.counter.get(), AtomicEx.counter.get());
             System.out.println("Thread: " + Thread.currentThread().getId() + " index = " + AtomicEx.counter.get() + "  counter = " + AtomicEx.counter.get());
