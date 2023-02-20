@@ -6,13 +6,9 @@ import java.util.concurrent.atomic.AtomicIntegerArray;
 public class AtomicEx {
 
     static AtomicInteger counter = new AtomicInteger(0);
-    static AtomicIntegerArray atomicArray = new AtomicIntegerArray(40);
+    static AtomicIntegerArray atomicArray = new AtomicIntegerArray(100);
 
     public static void main(String[] args) throws InterruptedException {
-
-        System.out.println("Start values of atomicArray:");
-        System.out.println(atomicArray.toString());
-        System.out.println();
 
         Thread t1 = new Thread(new M1());
         Thread t2 = new Thread(new M1());
@@ -30,13 +26,25 @@ public class AtomicEx {
 }
 
 class M1 implements Runnable {
-
     @Override
     public void run() {
-
-        while (AtomicEx.counter.incrementAndGet() < 40) {
-            AtomicEx.atomicArray.set(AtomicEx.counter.get(), AtomicEx.counter.get());
-            System.out.println("Thread: " + Thread.currentThread().getId() + " index = " + AtomicEx.counter.get() + "  counter = " + AtomicEx.counter.get());
+        int index;
+        while ((index = AtomicEx.counter.getAndIncrement()) < AtomicEx.atomicArray.length()) {
+            AtomicEx.atomicArray.set(index, index);
+            System.out.println("Thread: " + Thread.currentThread().getId() + " index = " + index + "  counter = " + AtomicEx.counter.get());
         }
     }
 }
+
+//class M1 implements Runnable {
+//
+//    @Override
+//    public void run() {
+//
+//        while (AtomicEx.counter.incrementAndGet() < AtomicEx.atomicArray.length()) {
+//            AtomicEx.atomicArray.set(AtomicEx.counter.get(), AtomicEx.counter.get());
+//            System.out.println("Thread: " + Thread.currentThread().getId() + " index = " + AtomicEx.counter.get() + "  counter = " + AtomicEx.counter.get());
+//        }
+//    }
+//}
+
